@@ -78,6 +78,7 @@
             label19 = new Label();
             label18 = new Label();
             label1 = new Label();
+            autoCopy = new CheckBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             panel1.SuspendLayout();
@@ -100,6 +101,7 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(autoCopy);
             tabPage1.Controls.Add(kepubifyAddDummyTitle);
             tabPage1.Controls.Add(kepubifyFullScreenReadingFixes);
             tabPage1.Controls.Add(kepubifyForceHyphenation);
@@ -633,6 +635,17 @@
             label1.TabIndex = 1;
             label1.Text = "Kobo Ultimate Experience";
             // 
+            // autoCopy
+            // 
+            autoCopy.AutoSize = true;
+            autoCopy.Location = new Point(843, 449);
+            autoCopy.Name = "autoCopy";
+            autoCopy.Size = new Size(161, 24);
+            autoCopy.TabIndex = 5;
+            autoCopy.Text = "Auto Copy To Kobo";
+            autoCopy.UseVisualStyleBackColor = true;
+            autoCopy.CheckedChanged += autoCopy_CheckedChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -714,5 +727,6 @@
         private Label label25;
         private Label label28;
         private Label label27;
+        private CheckBox autoCopy;
     }
 }

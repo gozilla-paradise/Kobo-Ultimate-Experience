@@ -483,13 +483,37 @@ namespace Kobo_Ultimate_Experience
                 if (files.Length > 0)
                 {
                     Directory.CreateDirectory("output");
+
                     var argumentList = string.Join(" ", Array.ConvertAll(files, file => $"\"{file}\""));
                     ProcessStartInfo processStartInfo = new ProcessStartInfo();
                     processStartInfo.FileName = Path.Join(Application.StartupPath, "packages", "kepubify-windows-64bit.exe");
                     processStartInfo.UseShellExecute = false;
                     processStartInfo.Arguments = argumentList + " -i -o output " + string.Join(" ", argumentOptions);
-                    Process.Start(processStartInfo);
-                    Process.Start("explorer.exe", "output");
+                    
+                    var p = Process.Start(processStartInfo);
+                    p.WaitForExit();
+                    
+                    if (autoCopy.Checked)
+                    {
+                        DialogResult result = MessageBox.Show("You have auto copy checked!\nThis will copy all files from output directory\n\nDo you want to copy to Kobo Device?", "Confirm Action", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        // Handle the result of the dialog
+                        if (result == DialogResult.Yes)
+                        {
+                            string koboBooks = Path.Combine(comboBox1.Text, "books");
+                            CopyFiles("output", koboBooks);
+                            Process.Start("explorer.exe", koboBooks);
+                        }
+                        else
+                        {
+                            Process.Start("explorer.exe", "output");
+                        }
+                    } else
+                    {
+                        Process.Start("explorer.exe", "output");
+                    }
+
+                    
                 }
             }
 
@@ -751,6 +775,11 @@ Position=Right
             string targetPath = Path.Join(comboBox1.Text, "fonts");
 
             CopyFiles(fontPath, targetPath);
+        }
+
+        private void autoCopy_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
