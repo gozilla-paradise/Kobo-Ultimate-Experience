@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainApp));
             appTabControl = new TabControl();
             kepubifyPage = new TabPage();
             autoCopy = new CheckBox();
@@ -651,6 +652,7 @@
             Controls.Add(mainHeaderLabel);
             Controls.Add(appTabControl);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "mainApp";

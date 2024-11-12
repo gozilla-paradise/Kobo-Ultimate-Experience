@@ -9,7 +9,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyVersion>1.0.0.1</AssemblyVersion>
     <FileVersion>$(AssemblyVersion)</FileVersion>
+    <ApplicationIcon>Fatcow-Farm-Fresh-Blueprint.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Fatcow-Farm-Fresh-Blueprint.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
