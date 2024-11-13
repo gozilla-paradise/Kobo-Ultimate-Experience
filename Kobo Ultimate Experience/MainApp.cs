@@ -201,7 +201,7 @@ namespace Kobo_Ultimate_Experience
                 throw new ArgumentNullException(nameof(driveLetter));
 
             // Clean the drive letter input
-            driveLetter = driveLetter.Trim().TrimEnd(':').Replace("\\", "");
+            driveLetter = driveLetter.Trim().Replace("\\", "").TrimEnd(':');
             if (driveLetter.Length != 1)
                 throw new ArgumentException("Invalid drive letter format");
 
