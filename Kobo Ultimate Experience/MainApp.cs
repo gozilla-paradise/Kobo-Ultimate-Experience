@@ -48,6 +48,11 @@ namespace Kobo_Ultimate_Experience
             public int Mode { get; set; }
             public int UserId { get; set; }
             public int GroupId { get; set; }
+            public string GroupName { get; set; }
+            public byte TypeFlag { get; set; }
+            public string Magic { get; set; }
+            public string Username { get; set; }
+            public long Size { get; set; }
         }
 
         private class FontReplaceData
@@ -203,6 +208,9 @@ namespace Kobo_Ultimate_Experience
             return EjectDrive(driveLetter[0]);
         }
 
+        static List<SymlinkInfo> symlinks = new List<SymlinkInfo>();
+        static List<SymlinkInfo> fileMeta = new List<SymlinkInfo>();
+
         private void ReplaceFont(string zipPath, List<FontReplaceData> fonts)
         {
             string tempDir = Path.Combine(Path.GetTempPath(), "KoboUltimateExperience");
@@ -211,7 +219,8 @@ namespace Kobo_Ultimate_Experience
             string extractedTgzPath = Path.Combine(tempDir, "KoboRoot.tgz");
             string extractedTarPath = Path.Combine(tempDir, "KoboRoot.tar");
 
-            var symlinks = new List<SymlinkInfo>();
+            symlinks = new List<SymlinkInfo>();
+            fileMeta = new List<SymlinkInfo>();
 
             firmwareProgressBar.Value = 10;
 
@@ -267,13 +276,46 @@ namespace Kobo_Ultimate_Experience
                                 Target = tarEntry.TarHeader.LinkName,
                                 Mode = tarEntry.TarHeader.Mode,
                                 UserId = tarEntry.UserId,
-                                GroupId = tarEntry.GroupId
+                                GroupId = tarEntry.GroupId,
+                                GroupName = tarEntry.TarHeader.GroupName,
+                                Magic = tarEntry.TarHeader.Magic,
+                                TypeFlag = tarEntry.TarHeader.TypeFlag,
+                                Username = tarEntry.TarHeader.UserName,
+                                Size = tarEntry.TarHeader.Size
                             });
                             continue;
+                        } else
+                        {
+                            fileMeta.Add(new SymlinkInfo
+                            {
+                                Path = entryName,
+                                Target = tarEntry.TarHeader.LinkName,
+                                Mode = tarEntry.TarHeader.Mode,
+                                UserId = tarEntry.UserId,
+                                GroupId = tarEntry.GroupId,
+                                GroupName = tarEntry.TarHeader.GroupName,
+                                Magic = tarEntry.TarHeader.Magic,
+                                TypeFlag = tarEntry.TarHeader.TypeFlag,
+                                Username = tarEntry.UserName,
+                                Size = tarEntry.TarHeader.Size
+                            });
                         }
 
                         if (tarEntry.IsDirectory)
                         {
+                            fileMeta.Add(new SymlinkInfo
+                            {
+                                Path = entryName,
+                                Target = tarEntry.TarHeader.LinkName,
+                                Mode = tarEntry.TarHeader.Mode,
+                                UserId = tarEntry.UserId,
+                                GroupId = tarEntry.GroupId,
+                                GroupName = tarEntry.TarHeader.GroupName,
+                                Magic = tarEntry.TarHeader.Magic,
+                                TypeFlag = tarEntry.TarHeader.TypeFlag,
+                                Username = tarEntry.UserName,
+                                Size = tarEntry.TarHeader.Size
+                            });
                             Directory.CreateDirectory(entryPath);
                             continue;
                         }
@@ -299,7 +341,8 @@ namespace Kobo_Ultimate_Experience
                 Directory.CreateDirectory(dirPath);
                 foreach (var font in fonts)
                 {
-                    File.Copy(font.FontPath, Path.Join(fontPath, font.FileName), true);
+                    if (File.Exists(Path.Join(fontPath, font.FileName)))
+                        File.Copy(font.FontPath, Path.Join(fontPath, font.FileName), true);
                 }
 
                 firmwareProgressBar.Value = 80;
@@ -315,6 +358,18 @@ namespace Kobo_Ultimate_Experience
                     // Add the root directory entry
                     TarEntry rootEntry = TarEntry.CreateEntryFromFile(tarExtractDir);
                     rootEntry.Name = ".";
+                    var symlinkx = fileMeta.FirstOrDefault(x => "./" + x.Path == rootEntry.Name + "/");
+                    if (symlinkx != null)
+                    {
+                        rootEntry.TarHeader.LinkName = symlinkx.Target;
+                        rootEntry.TarHeader.TypeFlag = symlinkx.TypeFlag;
+                        rootEntry.TarHeader.Magic = symlinkx.Magic;
+                        rootEntry.TarHeader.UserName = symlinkx.Username;
+                        rootEntry.TarHeader.GroupName = symlinkx.GroupName;
+                        rootEntry.TarHeader.Mode = symlinkx.Mode;
+                        rootEntry.UserId = symlinkx.UserId;
+                        rootEntry.GroupId = symlinkx.GroupId;
+                    }
                     tarOut.PutNextEntry(rootEntry);
                     tarOut.CloseEntry();
 
@@ -328,11 +383,14 @@ namespace Kobo_Ultimate_Experience
                         // Set symlink properties
                         entry.Name = symlink.Path.StartsWith("./") ? symlink.Path : "./" + symlink.Path;
                         entry.TarHeader.LinkName = symlink.Target;
-                        entry.TarHeader.TypeFlag = TarHeader.LF_SYMLINK;
+                        entry.TarHeader.TypeFlag = symlink.TypeFlag;
+                        entry.TarHeader.Magic = symlink.Magic;
+                        entry.TarHeader.UserName = symlink.Username;
+                        entry.TarHeader.GroupName = symlink.GroupName;
                         entry.TarHeader.Mode = symlink.Mode;
                         entry.UserId = symlink.UserId;
                         entry.GroupId = symlink.GroupId;
-                        entry.Size = 0;
+                        entry.Size = symlink.Size;
 
                         tarOut.PutNextEntry(entry);
                         tarOut.CloseEntry();
@@ -390,7 +448,17 @@ namespace Kobo_Ultimate_Experience
 
                 TarEntry entry = TarEntry.CreateEntryFromFile(file);
                 entry.Name = relativePath.Replace('\\', '/');
-
+                var symlink = fileMeta.SingleOrDefault(x => "./" + x.Path == entry.Name);
+                if (symlink != null) { 
+                    entry.TarHeader.LinkName = symlink.Target;
+                    entry.TarHeader.TypeFlag = symlink.TypeFlag;
+                    entry.TarHeader.Magic = symlink.Magic;
+                    entry.TarHeader.UserName = symlink.Username;
+                    entry.TarHeader.GroupName = symlink.GroupName;
+                    entry.TarHeader.Mode = symlink.Mode;
+                    entry.UserId = symlink.UserId;
+                    entry.GroupId = symlink.GroupId;
+                }
                 tarOutputStream.PutNextEntry(entry);
                 using (FileStream fs = File.OpenRead(file))
                 {
@@ -412,6 +480,18 @@ namespace Kobo_Ultimate_Experience
                     // Add directory entry with "./" prefix
                     TarEntry entry = TarEntry.CreateEntryFromFile(directory);
                     entry.Name = "./" + relativePath.Replace('\\', '/');
+                    var symlink = fileMeta.FirstOrDefault(x => "./" + x.Path == entry.Name + "/");
+                    if (symlink != null)
+                    {
+                        entry.TarHeader.LinkName = symlink.Target;
+                        entry.TarHeader.TypeFlag = symlink.TypeFlag;
+                        entry.TarHeader.Magic = symlink.Magic;
+                        entry.TarHeader.UserName = symlink.Username;
+                        entry.TarHeader.GroupName = symlink.GroupName;
+                        entry.TarHeader.Mode = symlink.Mode;
+                        entry.UserId = symlink.UserId;
+                        entry.GroupId = symlink.GroupId;
+                    }
                     tarOutputStream.PutNextEntry(entry);
                     tarOutputStream.CloseEntry();
                 }
