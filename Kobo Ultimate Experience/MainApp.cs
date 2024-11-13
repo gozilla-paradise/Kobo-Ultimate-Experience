@@ -825,7 +825,7 @@ menu_item :library    :Import books       :nickel_misc        :rescan_books_full
 
         private void installNickelClock_Click(object sender, EventArgs e)
         {
-            string clockPath = Path.Join(koboDriveCombo.Text, ".adds", "nickelclock", "settings.ini");
+            string clockPath = Path.Join(koboDriveCombo.Text, ".adds", "nickelclock");
             string clockConfig = @"[General]
 Debug=false
 Margin=Auto
@@ -842,7 +842,8 @@ Enabled=true
 Placement=Header
 Position=Right
 ";
-            File.WriteAllText(clockPath, clockConfig);
+            Directory.CreateDirectory(clockPath);
+            File.WriteAllText(Path.Join(clockPath, "settings.ini"), clockConfig);
             InstallPackage("nickelclock");
             Thread.Sleep(3000);
             EjectDrive(koboDriveCombo.Text.Replace("\\", ""));
