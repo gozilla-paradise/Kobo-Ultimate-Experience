@@ -623,7 +623,12 @@ namespace Kobo_Ultimate_Experience
                         if (result == DialogResult.Yes)
                         {
                             string koboBooks = Path.Combine(koboDriveCombo.Text, "books");
-                            CopyFiles("output", koboBooks);
+                            var fileToCopy = Array.ConvertAll(files, file => $"{Path.GetFileNameWithoutExtension(file)}.kepub.epub");
+                            //CopyFiles("output", koboBooks);
+                            foreach(var f in fileToCopy)
+                            {
+                                File.Copy(Path.Join("output",f), Path.Join(koboBooks, f), true);
+                            }
                             Process.Start("explorer.exe", koboBooks);
                         }
                         else
