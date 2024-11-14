@@ -1,5 +1,4 @@
 # Kobo Ultimate Experience
-
 ## Transform Your Reading Journey
 
 Elevate your Kobo e-reader experience with this elegant, all-in-one companion application that seamlessly bridges the gap between your digital library and reading device.
@@ -34,6 +33,13 @@ Transform your Kobo into a truly universal reading companion. Whether you're a m
 
 ### 🛡️ Tested Device
 - Tested on Kobo Libra C with firmware 4.41.23145
+
+### Special Thanks
+- Patrick Gaskin (Kepubify, NickelMenu, NickelSeries)
+- Shermp (NickelClock)
+- KoReader
+- GoogleFont (Noto Sans Thai Looped, Sarabun)
+- Font's Author (Mali, Js Jindara)
 
 Take control of your digital reading experience today with Kobo Ultimate Experience – where innovation meets simplicity.
 
