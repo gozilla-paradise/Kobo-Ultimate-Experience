@@ -73,42 +73,62 @@ namespace Kobo_Ultimate_Experience
         {
             new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "ub_arudjingxihei.ttf"
             },
             new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "Avenir.ttf"
             },
             new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "Avenir-Bold.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "Avenir-BoldItalic.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "Avenir-Italic.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "georgia.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "georgiab.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "georgiai.ttf"
             },new FontReplaceData
             {
-                FontPath = "packages/fonts/firmware/ub_arudjingxihei.ttf",
+                FontPath = "packages/fonts/firmware/NotoSansThai-Regular.ttf",
                 FileName = "georgiaz.ttf"
+            },
+            new FontReplaceData
+            {
+                FontPath = "packages/fonts/firmware/Sarabun-Regular.ttf",
+                FileName = "RakutenSerifApp-Regular.ttf"
+            },
+            new FontReplaceData
+            {
+                FontPath = "packages/fonts/firmware/Sarabun-Bold.ttf",
+                FileName = "RakutenSerifApp-Bold.ttf"
+            },
+            new FontReplaceData
+            {
+                FontPath = "packages/fonts/firmware/Sarabun-BoldItalic.ttf",
+                FileName = "RakutenSerifApp-BoldItalic.ttf"
+            },
+            new FontReplaceData
+            {
+                FontPath = "packages/fonts/firmware/Sarabun-Italic.ttf",
+                FileName = "RakutenSerifApp-Italic.ttf"
             },
         };
 
